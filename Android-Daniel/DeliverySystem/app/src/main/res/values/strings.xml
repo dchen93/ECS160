@@ -3,4 +3,28 @@
 
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+
+    <!--  LoginActivity -->
+    <string name="username_hint">Username</string>
+    <string name="password_hint">Password</string>
+    <string name="login">Login</string>
+    <string name="register">Register</string>
+    <string name="title_activity_register">RegisterActivity</string>
+
+    <string name="progress_login">Logging In</string>
+    <string name="progress_register">Registering</string>
+
+    <string name="error_login">Incorrect Username or Password</string>
+    <string name="success_register">Successfully Registered</string>
+    <string name="title_activity_home">HomeActivity</string>
+
+    <string name="title_section1">Section 1</string>
+    <string name="title_section2">Section 2</string>
+    <string name="title_section3">Section 3</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+
+    <string name="action_example">Example action</string>
+
 </resources>
