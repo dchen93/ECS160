@@ -9,9 +9,11 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Gravity;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
 
 
 public class LoginActivity extends ActionBarActivity implements OnClickListener {
@@ -128,7 +130,9 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
         @Override
         protected void onPostExecute(String s) {
             progressDialog.dismiss();
-            Toast.makeText(getApplicationContext(), R.string.success_register, Toast.LENGTH_SHORT).show();
+            Toast toast = Toast.makeText(getApplicationContext(), R.string.success_register, Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 780);
+            toast.show();
         }
     }
 }

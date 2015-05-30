@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">DeliverySystem</string>
+    <string name="app_name">Parcel Delivery System</string>
 
     <string name="hello_world">Hello world!</string>
     <string name="action_map">Map</string>
