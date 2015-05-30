@@ -17,6 +17,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,26 +33,35 @@ public class HomeActivity extends ActionBarActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
-    SectionsPagerAdapter mSectionsPagerAdapter;
+    //SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    ViewPager mViewPager;
+    //ViewPager mViewPager;
+
+    private ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        mListView = (ListView) findViewById(R.id.id_list_view);
+
+        String[] items = new String[] {"Daniel", "Ittai", "Ricky","Kristijonas", "Bob", "Jane", "Joe", "Mary", "John", "Elizabeth", "Larry", "Harry"};
+        ArrayAdapter<String> adapter =
+                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+
+        mListView.setAdapter(adapter);
 
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        //mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.pager);
-        mViewPager.setAdapter(mSectionsPagerAdapter);
+        //mViewPager = (ViewPager) findViewById(R.id.pager);
+        //mViewPager.setAdapter(mSectionsPagerAdapter);
 
     }
 
@@ -70,12 +81,12 @@ public class HomeActivity extends ActionBarActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
         if (id == R.id.action_map) {
-            Toast.makeText(getApplicationContext(), R.string.error_login, Toast.LENGTH_SHORT).show();
             Intent intent = new Intent(HomeActivity.this, MapsActivity.class);
+            HomeActivity.this.startActivity(intent);
+        }
+        if (id == R.id.action_deliveries) {
+            Intent intent = new Intent(HomeActivity.this, DeliveriesActivity.class);
             HomeActivity.this.startActivity(intent);
         }
 

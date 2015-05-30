@@ -54,7 +54,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_login, menu);
+        //getMenuInflater().inflate(R.menu.menu_login, menu);
         return true;
     }
 
@@ -65,10 +65,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
+
 
         return super.onOptionsItemSelected(item);
     }
@@ -92,11 +89,11 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
              * communicate with server, parse JSON */
 
             //if there's a match
-            if(true){
+            //if(true){
                 Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                 finish();
                 LoginActivity.this.startActivity(intent);
-            }
+            //}
 
             return null;
         }
