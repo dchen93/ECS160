@@ -1,6 +1,9 @@
 package com.dchen93.deliverysystem;
 
+import android.content.Intent;
+import android.graphics.Canvas;
 import android.location.Location;
+import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,8 +14,11 @@ import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
 
@@ -50,7 +56,10 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
             currentLocation = new LatLng(mLatitude,mLongitude);
             if(mMap != null) {
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 8));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+
+                Marker initialMarker = mMap.addMarker(new MarkerOptions().position(currentLocation).title("Tap Map For Directions"));
+                initialMarker.showInfoWindow();
             } else {
                 setUpMapIfNeeded();
             }
@@ -75,6 +84,45 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         buildGoogleApiClient();
         setUpMapIfNeeded();
         mMap.setMyLocationEnabled(true);
+        mMap.setTrafficEnabled(true);
+
+        // for marker clicks
+        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker marker) {
+                LatLng dest = marker.getPosition();
+
+                String uri =
+                        "http://maps.google.com/maps?f=d&hl=en&saddr="
+                        + Double.toString(currentLocation.latitude)
+                        + ","
+                        + Double.toString(currentLocation.longitude)
+                        + "&daddr="
+                        + Double.toString(dest.latitude)
+                        + ","
+                        + Double.toString(dest.longitude);
+
+                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+                startActivity(Intent.createChooser(intent, "Select an application"));
+
+                return true;
+            }
+        });
+
+        // for map clicks
+        mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+            @Override
+            public void onMapClick(LatLng latLng) {
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(latLng);
+                markerOptions.title("Tap Here For Directions To Pin Location");
+
+                mMap.clear(); // remove previous markers
+
+                Marker directions = mMap.addMarker(markerOptions);
+                directions.showInfoWindow();
+            }
+        });
     }
 
     @Override
@@ -119,7 +167,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
      */
     private void setUpMap() {
         if(currentLocation != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,10)); }
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,10));
+        }
         else {
             LatLngBounds SOUTH_BAY = new LatLngBounds(new LatLng(37.195331, -122.33139), new LatLng(37.520619, -121.503971));
             // Set the camera to the greatest possible zoom level that includes the bounds
