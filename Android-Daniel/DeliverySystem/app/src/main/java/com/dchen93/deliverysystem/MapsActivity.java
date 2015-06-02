@@ -29,6 +29,15 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 .addOnConnectionFailedListener(this)
                 .addApi(LocationServices.API)
                 .build();
+        mGoogleApiClient.connect();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
     }
 
     @Override
@@ -40,7 +49,11 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             mLongitude =  mLastLocation.getLongitude();
 
             currentLocation = new LatLng(mLatitude,mLongitude);
-            if(mMap != null) mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,10));
+            if(mMap != null) {
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 8));
+            } else {
+                setUpMapIfNeeded();
+            }
         }
     }
 
