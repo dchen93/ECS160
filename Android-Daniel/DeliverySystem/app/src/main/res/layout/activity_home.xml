@@ -11,27 +11,48 @@
     <ListView
         android:id="@+id/id_list_view"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:layout_above="@+id/button" />
+        android:layout_height="fill_parent" />
 
-    <Button
-        android:layout_width="140dp"
+    <!-- ADDED FLOATING ACTION BUTTON PLUGIN, COMPILE TO VIEW -->
+    <com.software.shell.fab.ActionButton xmlns:fab="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/action_button"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Add Friend"
-        android:id="@+id/button"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="@dimen/fab_margin"
+        android:layout_marginRight="@dimen/fab_margin"
+        fab:button_color="@color/fab_material_red_500"
+        fab:button_colorPressed="@color/fab_material_red_900"
+        fab:button_colorRipple="@color/fab_material_black"
+        fab:hide_animation="@anim/fab_roll_to_down"
+        fab:image="@drawable/fab_plus_icon"
+        fab:image_size="24dp"
+        fab:rippleEffect_enabled="false"
+        fab:shadowResponsiveEffect_enabled="true"
+        fab:shadow_color="#757575"
+        fab:shadow_radius="1.0dp"
+        fab:shadow_xOffset="0.5dp"
+        fab:shadow_yOffset="1.0dp"
+        fab:type="DEFAULT" />
 
-    <Button
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:text="Remove Friend"
-        android:id="@+id/button2"
-        android:layout_below="@+id/id_list_view"
-        android:layout_alignRight="@+id/id_list_view"
-        android:layout_alignEnd="@+id/id_list_view" />
+    <!--<Button-->
+    <!--android:layout_width="140dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Add Friend"-->
+    <!--android:id="@+id/addfriend"-->
+    <!--android:layout_alignParentBottom="true"-->
+    <!--android:layout_alignParentRight="true" />-->
+
+    <!--<Button-->
+    <!--style="?android:attr/buttonStyleSmall"-->
+    <!--android:layout_width="140dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:text="Remove Friend"-->
+    <!--android:id="@+id/button2"-->
+    <!--android:layout_below="@+id/id_list_view"-->
+    <!--android:layout_alignRight="@+id/id_list_view"-->
+    <!--android:layout_alignEnd="@+id/id_list_view" />-->
 </RelativeLayout>
 
 

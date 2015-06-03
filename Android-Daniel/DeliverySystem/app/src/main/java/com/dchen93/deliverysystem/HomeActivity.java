@@ -2,7 +2,11 @@ package com.dchen93.deliverysystem;
 
 import java.util.Locale;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.support.v4.app.Fragment;
@@ -17,10 +21,14 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.software.shell.fab.ActionButton;
 
 
 public class HomeActivity extends ActionBarActivity {
@@ -41,20 +49,49 @@ public class HomeActivity extends ActionBarActivity {
     //ViewPager mViewPager;
 
     private ListView mListView;
+    DialogInterface.OnClickListener dialogClickListener;
+    ActionButton mAddFriendBtn;
 
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
         mListView = (ListView) findViewById(R.id.id_list_view);
 
-        String[] items = new String[] {"Daniel", "Ittai", "Ricky","Kristijonas", "Bob", "Jane", "Joe", "Mary", "John", "Elizabeth", "Larry", "Harry"};
+        String[] items = new String[] {"Daniel", "Ittai", "Ricky","Kristijonas", "Bob", "Jane", "Joe",
+                "Mary", "John", "Elizabeth", "Larry", "Harry", "Bob", "Jane", "Joe", "Mary", "John", "Elizabeth", "Larry", "Harry"};
         ArrayAdapter<String> adapter =
-                new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, items);
+                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
 
         mListView.setAdapter(adapter);
 
+        dialogClickListener = new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        Toast.makeText(getApplicationContext()
+                                , "You've clicked " + "yes" +
+                                "\nThis toast should eventually be replaced\nby a call to delete user"
+                                , Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                String value = (String) parent.getItemAtPosition(position);
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                builder.setMessage("Remove " + value + " from Friends List");
+                builder.setTitle("Remove Friend");
+                builder.setCancelable(true);
+                builder.setPositiveButton("Yes", dialogClickListener).show();
+            }
+        });
+
+        mAddFriendBtn = (ActionButton) findViewById(R.id.action_button);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         //mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -63,6 +100,9 @@ public class HomeActivity extends ActionBarActivity {
         //mViewPager = (ViewPager) findViewById(R.id.pager);
         //mViewPager.setAdapter(mSectionsPagerAdapter);
 
+
+        android.support.v7.app.ActionBar bar = getSupportActionBar();
+        bar.setBackgroundDrawable(new ColorDrawable(0xff2979ff));
     }
 
 
@@ -70,6 +110,8 @@ public class HomeActivity extends ActionBarActivity {
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_home, menu);
+
+
         return true;
     }
 

@@ -56,7 +56,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
 
             currentLocation = new LatLng(mLatitude,mLongitude);
             if(mMap != null) {
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 10));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
 
                 Marker initialMarker = mMap.addMarker(new MarkerOptions().position(currentLocation).title("Tap Map For Directions"));
                 initialMarker.showInfoWindow();
@@ -91,6 +91,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             @Override
             public boolean onMarkerClick(Marker marker) {
                 LatLng dest = marker.getPosition();
+                if (dest == currentLocation) return true; // no need for directions to pin at your location
 
                 String uri =
                         "http://maps.google.com/maps?f=d&hl=en&saddr="
@@ -115,7 +116,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             public void onMapClick(LatLng latLng) {
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
-                markerOptions.title("Tap Here For Directions To Pin Location");
+                markerOptions.title("Tap Here");
+                markerOptions.snippet("For Delivery Directions");
 
                 mMap.clear(); // remove previous markers
 
@@ -167,7 +169,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
      */
     private void setUpMap() {
         if(currentLocation != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,10));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,12));
         }
         else {
             LatLngBounds SOUTH_BAY = new LatLngBounds(new LatLng(37.195331, -122.33139), new LatLng(37.520619, -121.503971));
