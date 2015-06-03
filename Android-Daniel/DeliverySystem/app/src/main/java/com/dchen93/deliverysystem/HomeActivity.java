@@ -15,16 +15,19 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.view.DragEvent;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -90,12 +93,18 @@ public class HomeActivity extends ActionBarActivity {
                 builder.setMessage("Remove " + value + " from Friends List");
                 builder.setTitle("Remove Friend");
                 builder.setCancelable(true);
-                builder.setNegativeButton("Cancel",dialogClickListener);
+                builder.setNegativeButton("Cancel", dialogClickListener);
                 builder.setPositiveButton("Yes", dialogClickListener).show();
             }
         });
 
+
+
         mAddFriendBtn = (ActionButton) findViewById(R.id.action_button);
+
+        mAddFriendBtn.setShowAnimation(ActionButton.Animations.ROLL_FROM_RIGHT);
+        mAddFriendBtn.setHideAnimation(ActionButton.Animations.ROLL_TO_RIGHT);
+
         mAddFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -109,7 +118,25 @@ public class HomeActivity extends ActionBarActivity {
         // Set up the ViewPager with the sections adapter.
         //mViewPager = (ViewPager) findViewById(R.id.pager);
         //mViewPager.setAdapter(mSectionsPagerAdapter);
+        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                switch (scrollState){
+                    case SCROLL_STATE_IDLE:
+                        mListView.setVerticalScrollBarEnabled(false);
+                        mAddFriendBtn.show();
+                        break;
+                    default:
+                        mListView.setVerticalScrollBarEnabled(true);
+                        mAddFriendBtn.hide();
+                }
+            }
 
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+                //nothing
+            }
+        });
 
         android.support.v7.app.ActionBar bar = getSupportActionBar();
         bar.setBackgroundDrawable(new ColorDrawable(0xff2979ff));
