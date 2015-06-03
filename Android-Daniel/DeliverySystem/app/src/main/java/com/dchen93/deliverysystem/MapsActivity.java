@@ -20,7 +20,7 @@ import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
-public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener{
+public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleMap.OnInfoWindowClickListener,GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
     private GoogleApiClient mGoogleApiClient;
@@ -52,10 +52,10 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
                 mGoogleApiClient);
         if (mLastLocation != null) {
             mLatitude = mLastLocation.getLatitude();
-            mLongitude =  mLastLocation.getLongitude();
+            mLongitude = mLastLocation.getLongitude();
 
-            currentLocation = new LatLng(mLatitude,mLongitude);
-            if(mMap != null) {
+            currentLocation = new LatLng(mLatitude, mLongitude);
+            if (mMap != null) {
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
 
                 Marker initialMarker = mMap.addMarker(new MarkerOptions().position(currentLocation).title("Tap Map For Directions"));
@@ -77,6 +77,47 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         Log.d("MapsActivity: ", "ConnectionFailed");
     }
 
+
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+        LatLng dest = marker.getPosition();
+        if (dest == currentLocation) return true; // no need for directions to pin at your location
+
+        String uri =
+                "http://maps.google.com/maps?f=d&hl=en&saddr="
+                        + Double.toString(currentLocation.latitude)
+                        + ","
+                        + Double.toString(currentLocation.longitude)
+                        + "&daddr="
+                        + Double.toString(dest.latitude)
+                        + ","
+                        + Double.toString(dest.longitude);
+
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+        startActivity(Intent.createChooser(intent, "Select an application"));
+
+        return true;
+    }
+
+    @Override
+    public void onInfoWindowClick(Marker marker) {
+        LatLng dest = marker.getPosition();
+        if (dest == currentLocation) return;
+
+        String uri =
+                "http://maps.google.com/maps?f=d&hl=en&saddr="
+                        + Double.toString(currentLocation.latitude)
+                        + ","
+                        + Double.toString(currentLocation.longitude)
+                        + "&daddr="
+                        + Double.toString(dest.latitude)
+                        + ","
+                        + Double.toString(dest.longitude);
+
+        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
+        startActivity(Intent.createChooser(intent, "Select an application"));
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,28 +128,8 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         mMap.setTrafficEnabled(true);
 
         // for marker clicks
-        mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker marker) {
-                LatLng dest = marker.getPosition();
-                if (dest == currentLocation) return true; // no need for directions to pin at your location
-
-                String uri =
-                        "http://maps.google.com/maps?f=d&hl=en&saddr="
-                        + Double.toString(currentLocation.latitude)
-                        + ","
-                        + Double.toString(currentLocation.longitude)
-                        + "&daddr="
-                        + Double.toString(dest.latitude)
-                        + ","
-                        + Double.toString(dest.longitude);
-
-                Intent intent = new Intent(android.content.Intent.ACTION_VIEW, Uri.parse(uri));
-                startActivity(Intent.createChooser(intent, "Select an application"));
-
-                return true;
-            }
-        });
+        mMap.setOnMarkerClickListener(this);
+        mMap.setOnInfoWindowClickListener(this);
 
         // for map clicks
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -168,10 +189,9 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
-        if(currentLocation != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,12));
-        }
-        else {
+        if (currentLocation != null) {
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
+        } else {
             LatLngBounds SOUTH_BAY = new LatLngBounds(new LatLng(37.195331, -122.33139), new LatLng(37.520619, -121.503971));
             // Set the camera to the greatest possible zoom level that includes the bounds
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SOUTH_BAY.getCenter(), 10));

@@ -70,10 +70,13 @@ public class HomeActivity extends ActionBarActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
-                        Toast.makeText(getApplicationContext()
+                        Toast.makeText(HomeActivity.this
                                 , "You've clicked " + "yes" +
                                 "\nThis toast should eventually be replaced\nby a call to delete user"
                                 , Toast.LENGTH_SHORT).show();
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
                 }
             }
         };
@@ -83,15 +86,22 @@ public class HomeActivity extends ActionBarActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 String value = (String) parent.getItemAtPosition(position);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
                 builder.setMessage("Remove " + value + " from Friends List");
                 builder.setTitle("Remove Friend");
                 builder.setCancelable(true);
+                builder.setNegativeButton("Cancel",dialogClickListener);
                 builder.setPositiveButton("Yes", dialogClickListener).show();
             }
         });
 
         mAddFriendBtn = (ActionButton) findViewById(R.id.action_button);
+        mAddFriendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getApplicationContext(),"Show Add User Dialog",Toast.LENGTH_SHORT).show();
+            }
+        });
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         //mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
