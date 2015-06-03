@@ -91,6 +91,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             @Override
             public boolean onMarkerClick(Marker marker) {
                 LatLng dest = marker.getPosition();
+                if (dest == currentLocation) return true; // no need for directions to pin at your location
 
                 String uri =
                         "http://maps.google.com/maps?f=d&hl=en&saddr="
