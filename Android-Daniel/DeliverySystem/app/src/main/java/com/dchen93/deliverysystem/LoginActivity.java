@@ -83,11 +83,11 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
             super.onPreExecute();
 
             //setup progress dialog
-            progressDialog = new ProgressDialog(LoginActivity.this);
-            progressDialog.setMessage(getString(R.string.progress_login));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(true);
-            progressDialog.show();
+//            progressDialog = new ProgressDialog(LoginActivity.this);
+//            progressDialog.setMessage(getString(R.string.progress_login));
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setCancelable(true);
+//            progressDialog.show();
         }
 
         @Override
@@ -107,8 +107,8 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
 
         @Override
         protected void onPostExecute(String s) {
-            progressDialog.dismiss();
-            Toast.makeText(getApplicationContext(), R.string.error_login, Toast.LENGTH_SHORT).show();
+//            progressDialog.dismiss();
+            Toast.makeText(getApplicationContext(), "Hello " + user.getText().toString() + "!", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -118,11 +118,11 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
             super.onPreExecute();
 
             //setup progress dialog
-            progressDialog = new ProgressDialog(LoginActivity.this);
-            progressDialog.setMessage(getString(R.string.progress_register));
-            progressDialog.setIndeterminate(true);
-            progressDialog.setCancelable(true);
-            progressDialog.show();
+//            progressDialog = new ProgressDialog(LoginActivity.this);
+//            progressDialog.setMessage(getString(R.string.progress_register));
+//            progressDialog.setIndeterminate(true);
+//            progressDialog.setCancelable(true);
+//            progressDialog.show();
         }
 
         @Override
@@ -134,7 +134,7 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
 
         @Override
         protected void onPostExecute(String s) {
-            progressDialog.dismiss();
+//            progressDialog.dismiss();
             Toast toast = Toast.makeText(getApplicationContext(), R.string.success_register, Toast.LENGTH_SHORT);
             toast.setGravity(Gravity.TOP|Gravity.CENTER_HORIZONTAL, 0, 780);
             toast.show();
