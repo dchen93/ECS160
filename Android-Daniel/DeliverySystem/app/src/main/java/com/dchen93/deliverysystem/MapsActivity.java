@@ -39,6 +39,7 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     private double mLatitude;
     private double mLongitude;
     private LatLng currentLocation = null;
+    private LatLng currentLocation2 = null;
     double xcoord = 0;
     double ycoord = 0;
     String deliveryFriend = "";
@@ -71,9 +72,10 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
             mLatitude = mLastLocation.getLatitude();
             mLongitude = mLastLocation.getLongitude();
 
-            currentLocation = new LatLng(mLatitude, mLongitude);
+            currentLocation = new LatLng(mLatitude+.01, mLongitude+.5);
+            currentLocation2 = new LatLng(mLatitude, mLongitude);
             if (mMap != null) {
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation2, 10));
 
                 Marker initialMarker = mMap.addMarker(new MarkerOptions().position(currentLocation).title("Tap Map For Directions"));
                 initialMarker.showInfoWindow();
@@ -294,24 +296,29 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         LocationManager locMan = (LocationManager) getSystemService(LOCATION_SERVICE);
         Criteria criteria = new Criteria();
         String provider = locMan.getBestProvider(criteria, false);
-        Location location = mMap.getMyLocation();
+        Location location = locMan.getLastKnownLocation(locMan.getBestProvider(criteria, false));
+
         if (currentLocation != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,5));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,10));
         } else {
             LatLngBounds SOUTH_BAY = new LatLngBounds(new LatLng(37.195331, -122.33139), new LatLng(location.getLatitude(), location.getLongitude()));
             // Set the camera to the greatest possible zoom level that includes the bounds
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SOUTH_BAY.getCenter(),3));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SOUTH_BAY.getCenter(),10));
         }
-        mMap.setMapType(1);
 
+        mMap.setMapType(1);
         options = new PolylineOptions()
-            .add(new LatLng(38.532600, -121.577359))
-            .add(new LatLng(location.getLatitude(), location.getLongitude()))
-            .width(5)
-            .visible(true)
-            //.zIndex(30)
-            .color(Color.RED);
+                .add(new LatLng(location.getLatitude()+.01, location.getLongitude()+.5))
+                .add(new LatLng(location.getLatitude(), location.getLongitude()))
+                .width(5)
+                .visible(true)
+                        //.zIndex(30)
+                .color(Color.RED);
 
         mMap.addPolyline(options);
+
+
+
+
     }
 }

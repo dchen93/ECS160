@@ -29,7 +29,8 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_below="@+id/image_view"
-        android:hint="@string/username_hint">
+        android:hint="@string/username_hint"
+        android:singleLine="true">
 
         <requestFocus />
     </EditText>
@@ -42,7 +43,8 @@
         android:layout_centerHorizontal="true"
         android:hint="@string/password_hint"
         android:inputType="textPassword"
-        android:layout_marginBottom="10dp"/>
+        android:layout_marginBottom="10dp"
+        android:singleLine="true" />
 
     <Button
         android:id="@+id/login"

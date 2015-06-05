@@ -8,8 +8,9 @@
 
     <TextView android:text="@string/deliveryFriend" android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="78dp"
+        android:layout_marginTop="106dp"
         android:id="@+id/deliveryFriend"
+        android:textSize="25dp"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true" />
 
@@ -29,6 +30,7 @@
         android:id="@+id/coordinates"
         android:layout_below="@+id/deliveryFriend"
         android:layout_centerHorizontal="true"
-        android:textAlignment="center" />
+        android:textAlignment="center"
+        android:textSize="20dp" />
 
 </RelativeLayout>

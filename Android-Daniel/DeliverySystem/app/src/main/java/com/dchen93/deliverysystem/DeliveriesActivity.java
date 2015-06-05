@@ -115,8 +115,8 @@ public class DeliveriesActivity extends ActionBarActivity {
 
         if(delivery == 1)
         {
-            friendName.setText(deliveryFriend);
-            coordinates.setText("Friends Coordinates\n"+xcoord+", "+ycoord);
+            friendName.setText("Delivery Partner: " + deliveryFriend);
+            coordinates.setText("(" + xcoord + ", " + ycoord + ")");
         }
 
         Button cancel = (Button) findViewById(R.id.canceldelivery);

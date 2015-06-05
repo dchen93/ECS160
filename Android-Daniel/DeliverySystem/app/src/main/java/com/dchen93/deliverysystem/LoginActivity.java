@@ -45,10 +45,25 @@ public class LoginActivity extends ActionBarActivity implements OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.login:
-                new LoginAttempt().execute();
+                if(user.getText().length()>0)
+                {
+                    new LoginAttempt().execute();
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Please enter a username & password before continuing", Toast.LENGTH_SHORT).show();
+                }
+
                 break;
             case R.id.register:
-                new RegisterAttempt().execute();
+                if(user.getText().length()>0)
+                {
+                    new RegisterAttempt().execute();
+                }
+                else
+                {
+                    Toast.makeText(getApplicationContext(), "Please enter a username & password before continuing", Toast.LENGTH_SHORT).show();
+                }
                 break;
             default:
                 break;
