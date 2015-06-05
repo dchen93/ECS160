@@ -110,6 +110,8 @@ public class HomeActivity extends ActionBarActivity {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         friends.add(input.getText());
+                        adapter.remove(value);
+                        //adapter.notifyDataSetChanged();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         break;
@@ -142,14 +144,13 @@ public class HomeActivity extends ActionBarActivity {
             @Override
             public void onClick(View v) {
                 input = new EditText(HomeActivity.this);
+                input.setSingleLine();
                 AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
                 builder.setTitle("Add Friend");
                 builder.setCancelable(true);
                 builder.setView(input);
                 builder.setNegativeButton("Cancel", dialogClickListener2);
                 builder.setPositiveButton("Add", dialogClickListener2).show();
-
-
 
             }
         });
