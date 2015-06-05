@@ -91,7 +91,8 @@ public class HomeActivity extends ActionBarActivity {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         friends.remove(value);
-                        adapter.remove(value);
+                        //adapter.remove(value);
+                        adapter.notifyDataSetChanged();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         break;
@@ -110,8 +111,8 @@ public class HomeActivity extends ActionBarActivity {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
                         friends.add(input.getText());
-                        adapter.remove(value);
-                        //adapter.notifyDataSetChanged();
+                        //adapter.add(input.getText());
+                        adapter.notifyDataSetChanged();
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         break;
