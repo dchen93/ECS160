@@ -2,7 +2,10 @@ package com.dchen93.deliverysystem;
 
 import android.content.Intent;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.location.Criteria;
 import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
@@ -19,6 +22,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 
 public class MapsActivity extends FragmentActivity implements GoogleApiClient.ConnectionCallbacks, GoogleMap.OnInfoWindowClickListener,GoogleApiClient.OnConnectionFailedListener, GoogleMap.OnMarkerClickListener {
 
@@ -28,6 +39,12 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
     private double mLatitude;
     private double mLongitude;
     private LatLng currentLocation = null;
+    double xcoord = 0;
+    double ycoord = 0;
+    String deliveryFriend = "";
+    int delivery = 0;
+    String fileName;
+    PolylineOptions options;
 
     protected synchronized void buildGoogleApiClient() {
         mGoogleApiClient = new GoogleApiClient.Builder(this)
@@ -128,8 +145,93 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
         mMap.setTrafficEnabled(true);
 
         // for marker clicks
-        mMap.setOnMarkerClickListener(this);
+        //mMap.setOnMarkerClickListener(this);
         mMap.setOnInfoWindowClickListener(this);
+
+        fileName = getFilesDir()+"data.txt";
+        String line;
+
+        try {
+
+            FileReader fileReader1 = new FileReader(fileName);
+            BufferedReader bufferedReader = new BufferedReader(fileReader1);
+            int flag = 0;
+            while ((line = bufferedReader.readLine()) != null) {
+                //System.out.println(line);
+                if(line.equals("-"))
+                {
+                    flag = 1;
+                    continue;
+                }
+                if(flag == 1)
+                {
+                    if(line.equals("false"))
+                    {
+                        delivery = 0;
+                        break;
+                    }
+                    else
+                    {
+                        delivery = 1;
+                        flag++;
+                    }
+                    continue;
+                }
+                if(flag == 2)
+                {
+                    deliveryFriend = line;
+                    flag++;
+                    continue;
+                }
+                if(flag == 3)
+                {
+                    xcoord = Double.parseDouble(line);
+                    flag++;
+                    continue;
+                }
+                if(flag == 4)
+                {
+                    ycoord = Double.parseDouble(line);
+                    flag++;
+                    break;
+                }
+                //friends.add(line);
+            }
+            bufferedReader.close();
+        } catch (FileNotFoundException ex) {
+            try{
+                PrintWriter writer = new PrintWriter("data.txt");
+                writer.println("Daniel");
+                writer.println("Ittai");
+                writer.println("Ricky");
+                writer.println("Kristijonas");
+                writer.println("Bob");
+                writer.println("Jane");
+                writer.println("Joe");
+                writer.println("Mary");
+                writer.println("Elizabeth");
+                writer.println("Larry");
+                writer.println("Harry");
+                writer.println("John");
+                writer.println("Liz");
+                writer.println("-");
+                writer.println("false");
+                writer.println(" ");//Deliveryfriend
+                writer.println("38.532247");//xcoord
+                writer.println("-121.577208");//ycoord
+                writer.close();
+            } catch(FileNotFoundException ex2) {
+
+            }
+
+        } catch (IOException ex) {
+            System.out.println(
+                    "Error reading file '"
+                            + fileName + "'");
+            // Or we could just do this:
+            // ex.printStackTrace();
+        }
+
 
         // for map clicks
         mMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -189,13 +291,27 @@ public class MapsActivity extends FragmentActivity implements GoogleApiClient.Co
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
+        LocationManager locMan = (LocationManager) getSystemService(LOCATION_SERVICE);
+        Criteria criteria = new Criteria();
+        String provider = locMan.getBestProvider(criteria, false);
+        Location location = mMap.getMyLocation();
         if (currentLocation != null) {
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 12));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,5));
         } else {
-            LatLngBounds SOUTH_BAY = new LatLngBounds(new LatLng(37.195331, -122.33139), new LatLng(37.520619, -121.503971));
+            LatLngBounds SOUTH_BAY = new LatLngBounds(new LatLng(37.195331, -122.33139), new LatLng(location.getLatitude(), location.getLongitude()));
             // Set the camera to the greatest possible zoom level that includes the bounds
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SOUTH_BAY.getCenter(), 10));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(SOUTH_BAY.getCenter(),3));
         }
         mMap.setMapType(1);
+
+        options = new PolylineOptions()
+            .add(new LatLng(38.532600, -121.577359))
+            .add(new LatLng(location.getLatitude(), location.getLongitude()))
+            .width(5)
+            .visible(true)
+            //.zIndex(30)
+            .color(Color.RED);
+
+        mMap.addPolyline(options);
     }
 }

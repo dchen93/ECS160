@@ -35,6 +35,9 @@
     <string name="title_activity_maps">Map</string>
     <string name="title_activity_deliveries">Deliveries</string>
 
+    <string name="deliveryFriend">No Delivery in Progress</string>
+    <string name="coordinates"></string>
+
 
 
 </resources>
