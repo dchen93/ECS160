@@ -1,5 +1,6 @@
 package com.dchen93.deliverysystem;
 
+import java.util.ArrayList;
 import java.util.Locale;
 
 import android.app.AlertDialog;
@@ -26,6 +27,7 @@ import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -50,21 +52,36 @@ public class HomeActivity extends ActionBarActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     //ViewPager mViewPager;
-
+    ArrayList friends = new ArrayList<String>();
     private ListView mListView;
     DialogInterface.OnClickListener dialogClickListener;
+    DialogInterface.OnClickListener dialogClickListener2;
+    EditText input;// = new EditText(this);
     ActionButton mAddFriendBtn;
+    String value = "";
+    ArrayAdapter<String> adapter;
+
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
-
         mListView = (ListView) findViewById(R.id.id_list_view);
 
-        String[] items = new String[] {"Daniel", "Ittai", "Ricky","Kristijonas", "Bob", "Jane", "Joe",
-                "Mary", "John", "Elizabeth", "Larry", "Harry", "Bob", "Jane", "Joe", "Mary", "John", "Elizabeth", "Larry", "Harry"};
-        ArrayAdapter<String> adapter =
-                new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, items);
+        friends.add("Daniel");
+        friends.add("Ittai");
+        friends.add("Ricky");
+        friends.add("Kristijonas");
+        friends.add("Bob");
+        friends.add("Jane");
+        friends.add("Joe");
+        friends.add("Mary");
+        friends.add("Elizabeth");
+        friends.add("Larry");
+        friends.add("Harry");
+        friends.add("John");
+        friends.add("Liz");
+
+        adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, friends);
 
         mListView.setAdapter(adapter);
 
@@ -73,13 +90,30 @@ public class HomeActivity extends ActionBarActivity {
             public void onClick(DialogInterface dialog, int which) {
                 switch (which){
                     case DialogInterface.BUTTON_POSITIVE:
-                        Toast.makeText(HomeActivity.this
-                                , "You've clicked " + "yes" +
-                                "\nThis toast should eventually be replaced\nby a call to delete user"
-                                , Toast.LENGTH_SHORT).show();
+                        friends.remove(value);
+                        adapter.remove(value);
                         break;
                     case DialogInterface.BUTTON_NEGATIVE:
                         break;
+                    case DialogInterface.BUTTON_NEUTRAL:
+                        Toast.makeText(HomeActivity.this
+                               , "Delivery Added"
+                               , Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        };
+
+        dialogClickListener2 = new DialogInterface.OnClickListener(){
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                switch (which){
+                    case DialogInterface.BUTTON_POSITIVE:
+                        friends.add(input.getText());
+                        break;
+                    case DialogInterface.BUTTON_NEGATIVE:
+                        break;
+
                 }
             }
         };
@@ -87,14 +121,13 @@ public class HomeActivity extends ActionBarActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                String value = (String) parent.getItemAtPosition(position);
-
+                value = (String) parent.getItemAtPosition(position);
                 AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
-                builder.setMessage("Remove " + value + " from Friends List");
-                builder.setTitle("Remove Friend");
+                builder.setTitle(value);
                 builder.setCancelable(true);
                 builder.setNegativeButton("Cancel", dialogClickListener);
-                builder.setPositiveButton("Yes", dialogClickListener).show();
+                builder.setPositiveButton("Remove", dialogClickListener);
+                builder.setNeutralButton("StartDelivery", dialogClickListener).show();
             }
         });
 
@@ -102,13 +135,22 @@ public class HomeActivity extends ActionBarActivity {
 
         mAddFriendBtn = (ActionButton) findViewById(R.id.action_button);
 
-        mAddFriendBtn.setShowAnimation(ActionButton.Animations.ROLL_FROM_RIGHT);
-        mAddFriendBtn.setHideAnimation(ActionButton.Animations.ROLL_TO_RIGHT);
+        mAddFriendBtn.setShowAnimation(ActionButton.Animations.JUMP_FROM_DOWN);
+        mAddFriendBtn.setHideAnimation(ActionButton.Animations.JUMP_TO_DOWN);
 
         mAddFriendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(getApplicationContext(),"Show Add User Dialog",Toast.LENGTH_SHORT).show();
+                input = new EditText(HomeActivity.this);
+                AlertDialog.Builder builder = new AlertDialog.Builder(HomeActivity.this);
+                builder.setTitle("Add Friend");
+                builder.setCancelable(true);
+                builder.setView(input);
+                builder.setNegativeButton("Cancel", dialogClickListener2);
+                builder.setPositiveButton("Add", dialogClickListener2).show();
+
+
+
             }
         });
         // Create the adapter that will return a fragment for each of the three
